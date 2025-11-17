@@ -8,9 +8,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "xlsx": "^0.18.5"
+    "express": "file:express-4.19.2.tgz",
+    "body-parser": "file:body-parser-1.20.3.tgz",
+    "cors": "file:cors-2.8.5.tgz",
+    "xlsx": "file:xlsx-0.18.5.tgz"
   }
 }
