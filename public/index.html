@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inward Ledger Form</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Inward Ledger Form</h2>
+    <form id="ledgerForm">
+      <label>1. Sl No *</label>
+      <input type="text" name="slNo" required>
+
+      <label>2. Inward Date *</label>
+      <input type="date" name="inwardDate" required>
+
+      <label>3. Invoice / Delivery Challan Date *</label>
+      <input type="date" name="invoiceDate" required>
+
+      <label>4. To Whom (Person Name)</label>
+      <input type="text" name="personName">
+
+      <label>5. Department</label>
+      <input type="text" name="department">
+
+      <label>6. Item Description <span class="required-label">*</span></label>
+      <div class="checkbox-group" id="itemSection">
+        <label><input type="checkbox" name="item" value="Laptop"> Laptop</label>
+        <label><input type="checkbox" name="item" value="Mobile"> Mobile</label>
+        <label><input type="checkbox" name="item" value="Desktop"> Desktop</label>
+        <label><input type="checkbox" name="item" value="Mouse"> Mouse</label>
+        <label><input type="checkbox" name="item" value="Keyboard"> Keyboard</label>
+        <label><input type="checkbox" name="item" value="Headsets"> Headsets</label>
+        <label><input type="checkbox" name="item" value="Monitor">Monitor</label>
+        <label><input type="checkbox" name="item" value="Other">Other</label>
+      </div>
+      <p id="itemError" class="error-message">⚠️ Please select at least one item.</p>
+
+      <label>7. Make <span class="required-label">*</span></label>
+      <div class="checkbox-group" id="makeSection">
+        <label><input type="checkbox" name="make" value="Lenovo"> Lenovo</label>
+        <label><input type="checkbox" name="make" value="iPhone"> iPhone</label>
+        <label><input type="checkbox" name="make" value="Jabra"> Jabra</label>
+        <label><input type="checkbox" name="make" value="Cisco"> Cisco</label>
+        <label><input type="checkbox" name="make" value="Logitech"> Logitech</label>
+        <label><input type="checkbox" name="make" value="Other"> Other</label>
+      </div>
+      <p id="makeError" class="error-message">⚠️ Please select at least one make.</p>
+
+      <label>8. Other Item Description</label>
+      <input type="text" name="otherDesc">
+
+      <label>9. IMEI Number</label>
+      <input type="text" name="imei">
+
+      <label>10. Comments</label>
+      <textarea name="comments" rows="3"></textarea>
+
+      <div class="button-group">
+        <button type="submit">Submit</button>
+        <button type="button" id="downloadBtn" class="download">Download Excel</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("ledgerForm");
+    const itemError = document.getElementById("itemError");
+    const makeError = document.getElementById("makeError");
+  
+    // Hide error when any checkbox is changed
+    document.querySelectorAll("input[type='checkbox']").forEach(cb => {
+      cb.addEventListener("change", () => {
+        if (cb.name === "item") itemError.style.display = "none";
+        if (cb.name === "make") makeError.style.display = "none";
+      });
+    });
+  
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+  
+      const selectedItems = Array.from(document.querySelectorAll("input[name='item']:checked")).map(el => el.value);
+      const selectedMakes = Array.from(document.querySelectorAll("input[name='make']:checked")).map(el => el.value);
+  
+      let valid = true;
+      itemError.style.display = "none";
+      makeError.style.display = "none";
+  
+      // Checkbox validation
+      if (selectedItems.length === 0) {
+        itemError.style.display = "block";
+        valid = false;
+      }
+  
+      if (selectedMakes.length === 0) {
+        makeError.style.display = "block";
+        valid = false;
+      }
+  
+      if (!valid) return;
+  
+      // Collect all form data
+      const formData = {
+        slNo: document.querySelector("input[name='slNo']").value,
+        inwardDate: document.querySelector("input[name='inwardDate']").value,
+        invoiceDate: document.querySelector("input[name='invoiceDate']").value,
+        personName: document.querySelector("input[name='personName']").value,
+        department: document.querySelector("input[name='department']").value,
+        item: selectedItems,
+        make: selectedMakes,
+        otherDesc: document.querySelector("input[name='otherDesc']").value,
+        imei: document.querySelector("input[name='imei']").value,
+        comments: document.querySelector("textarea[name='comments']").value,
+      };
+  
+      try {
+        const response = await fetch("/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        });
+  
+        if (!response.ok) {
+          throw new Error("Server returned " + response.status);
+        }
+  
+        const result = await response.json();
+        alert(result.message);
+        form.reset();
+      } catch (error) {
+        console.error("❌ Error submitting form:", error);
+        alert("❌ Failed to submit form. Check console or server logs for details.");
+      }
+    });
+  
+    // Optional: Excel download
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      window.location.href = "/download";
+    });
+  </script>
+</body>
+</html>

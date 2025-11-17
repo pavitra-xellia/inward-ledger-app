@@ -1,0 +1,104 @@
+body {
+  font-family: "Calbiri", Arial, sans-serif;
+  background: #e0e0dc;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.form-container {
+  background: rgb(194, 212, 128);
+  padding: 30px;
+  border-radius: 15px;
+  width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.required-label {
+  color: red;
+  font-size: 14px;
+}
+.error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #0a3d62;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 15px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.checkbox-group {
+  display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 40px;
+      max-width: 600px;
+      margin-bottom: 30px;
+}
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* space between box and text */
+  font-weight: bold;
+}
+input[type="checkbox"] {
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  width: 18px;
+  height: 18px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  flex: 1;
+  background: #0078d7;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #005fa3;
+}
+
+button.download {
+  background: #0f9d58;
+}
+
+button.download:hover {
+  background: #0b7d46;
+}
